@@ -4,85 +4,10 @@
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <title>@yield('title', 'Kaizen Tracker')</title>
-    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet"/>
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script id="tailwind-config">
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    colors: {
-                        "tertiary": "#546168",
-                        "error": "#9f403d",
-                        "on-background": "#2a3437",
-                        "secondary-container": "#cfe6f2",
-                        "on-primary": "#f6f7ff",
-                        "on-primary-fixed-variant": "#005ab1",
-                        "surface-container-high": "#e1eaec",
-                        "on-secondary": "#f2faff",
-                        "background": "#f8fafb",
-                        "primary-container": "#d6e3ff",
-                        "primary": "#005db6",
-                        "surface-dim": "#cfdce0",
-                        "tertiary-container": "#e6f3fb",
-                        "surface": "#f8fafb",
-                        "on-primary-container": "#00519f",
-                        "on-tertiary-container": "#505c62",
-                        "error-container": "#fe8983",
-                        "outline": "#727d80",
-                        "secondary-fixed": "#cfe6f2",
-                        "surface-container-low": "#f0f4f6",
-                        "primary-fixed": "#d6e3ff",
-                        "surface-container-lowest": "#ffffff",
-                        "tertiary-dim": "#49555b",
-                        "tertiary-fixed-dim": "#d7e4ec",
-                        "on-secondary-fixed-variant": "#495f69",
-                        "primary-dim": "#0051a1",
-                        "on-surface-variant": "#566164",
-                        "inverse-primary": "#609efc",
-                        "on-primary-fixed": "#003e7e",
-                        "surface-variant": "#d9e4e8",
-                        "on-error-container": "#752121",
-                        "on-tertiary": "#f3faff",
-                        "on-secondary-fixed": "#2d424c",
-                        "on-tertiary-fixed": "#3e4a50",
-                        "surface-container": "#e8eff1",
-                        "surface-tint": "#005db6",
-                        "error-dim": "#4e0309",
-                        "inverse-on-surface": "#9a9d9e",
-                        "tertiary-fixed": "#e6f3fb",
-                        "outline-variant": "#a9b4b7",
-                        "secondary-dim": "#415660",
-                        "on-secondary-container": "#40555f",
-                        "primary-fixed-dim": "#c0d5ff",
-                        "inverse-surface": "#0b0f10",
-                        "on-surface": "#2a3437",
-                        "surface-container-highest": "#d9e4e8",
-                        "secondary-fixed-dim": "#c1d8e4",
-                        "on-tertiary-fixed-variant": "#5a666d",
-                        "on-error": "#fff7f6",
-                        "surface-bright": "#f8fafb",
-                        "secondary": "#4d626c"
-                    },
-                    fontFamily: {
-                        "headline": ["Inter"],
-                        "body": ["Inter"],
-                        "label": ["Inter"]
-                    },
-                    borderRadius: { "DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem" },
-                },
-            },
-        }
-    </script>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <script src="{{ asset('js/sweetalert2.all.min.js') }}"></script>
     <style>
-        .material-symbols-outlined {
-            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-            vertical-align: middle;
-        }
-        body { font-family: 'Inter', sans-serif; }
-        .row-interactive:hover { background-color: #f1f5f9; cursor: pointer; }
+        body { font-family: 'Inter', system-ui, sans-serif; }
     </style>
 </head>
 <body class="bg-background text-on-surface antialiased flex min-h-screen">
