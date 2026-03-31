@@ -12,11 +12,11 @@
                 <span class="material-symbols-outlined text-[12px]">chevron_right</span>
                 <span class="text-primary">Weekly Closing</span>
             </nav>
-            <h2 class="text-2xl font-bold tracking-tight text-inverse-surface">Fast Validation: Week {{ now()->format('W') }}</h2>
+            <h2 class="text-2xl font-bold tracking-tight text-inverse-surface">Pending Validations</h2>
         </div>
         <div class="flex gap-2">
             <button class="bg-primary text-white px-8 py-3 rounded-sm text-sm font-bold uppercase tracking-widest hover:brightness-110 shadow-lg shadow-primary/30 transition-all active:scale-95">
-                Finalize Week {{ now()->format('W') }}
+                Refresh List
             </button>
         </div>
     </div>
@@ -85,7 +85,7 @@
             </div>
         </div>
         @empty
-        <div class="p-8 text-center text-on-surface-variant italic text-sm">No active plans found for this week.</div>
+        <div class="p-8 text-center text-on-surface-variant italic text-sm">No pending plans found. All caught up!</div>
         @endforelse
     </div>
 </section>
@@ -135,35 +135,87 @@
         const formData = new FormData(form);
         const id = formData.get('plan_id');
 
-        fetch(`/api/weekly-plans/${id}/status`, {
-            method: 'POST', // Use POST with _method PATCH for Laravel
+        fetch(`./../api/weekly-plans/${id}/status`, {
+            method: 'POST',
             body: formData,
             headers: {
+                'Accept': 'application/json',
                 'X-CSRF-TOKEN': '{{ csrf_token() }}',
                 'X-HTTP-Method-Override': 'PATCH'
             }
-        }).then(res => res.json()).then(data => {
-            location.reload();
+        }).then(async res => {
+            if (!res.ok) {
+                const errorData = await res.json();
+                throw new Error(errorData.message || 'Validation failed');
+            }
+            return res.json();
+        }).then(data => {
+            Swal.fire({
+                title: 'Berhasil!',
+                text: 'Plan status updated successfully.',
+                icon: 'success',
+                timer: 1500,
+                showConfirmButton: false
+            }).then(() => {
+                location.reload();
+            });
         }).catch(err => {
-            alert('Validation failed. Check inputs.');
+            Swal.fire({
+                title: 'Gagal!',
+                text: err.message,
+                icon: 'error',
+                confirmButtonColor: '#0061e0',
+            });
         });
     }
 
     function updateStatus(id, status) {
-        if(!confirm('Are you sure you want to update this status?')) return;
-        
-        const formData = new FormData();
-        formData.append('status', status);
+        Swal.fire({
+            title: 'Konfirmasi',
+            text: 'Apakah Anda yakin ingin memperbarui status ini?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#0061e0',
+            cancelButtonColor: '#ff5c5c',
+            confirmButtonText: 'Ya, Perbarui!',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const formData = new FormData();
+                formData.append('status', status);
 
-        fetch(`/api/weekly-plans/${id}/status`, {
-            method: 'POST',
-            body: formData,
-            headers: {
-                'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                'X-HTTP-Method-Override': 'PATCH'
+                fetch(`./../api/weekly-plans/${id}/status`, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'Accept': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'X-HTTP-Method-Override': 'PATCH'
+                    }
+                }).then(async res => {
+                    if (!res.ok) {
+                        const errorData = await res.json();
+                        throw new Error(errorData.message || 'Update failed');
+                    }
+                    return res.json();
+                }).then(data => {
+                    Swal.fire({
+                        title: 'Berhasil!',
+                        text: 'Status updated.',
+                        icon: 'success',
+                        timer: 1000,
+                        showConfirmButton: false
+                    }).then(() => {
+                        location.reload();
+                    });
+                }).catch(err => {
+                    Swal.fire({
+                        title: 'Gagal!',
+                        text: err.message,
+                        icon: 'error'
+                    });
+                });
             }
-        }).then(res => res.json()).then(data => {
-            location.reload();
         });
     }
 </script>

@@ -11,7 +11,7 @@ class UpdateWeeklyStatusRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return $this->user()->role === 'admin';
+        return true; // Middleware handles role check; request validation should just validate data.
     }
 
     /**

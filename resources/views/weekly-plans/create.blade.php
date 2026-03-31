@@ -18,7 +18,7 @@
             </div>
         </div>
 
-        <form action="{{ route('api.weekly-plans.store') }}" method="POST" class="space-y-4">
+        <form action="{{ route('weekly-plans.store') }}" method="POST" class="space-y-4">
             @csrf
             <!-- Row 1: SPV & Title -->
             <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
@@ -57,18 +57,14 @@
                 <div>
                     <label class="block text-[10px] uppercase tracking-widest text-on-surface-variant font-bold mb-2">Category</label>
                     <div class="flex flex-wrap gap-1">
+                        @forelse($categories ?? [] as $index => $cat)
                         <label class="cursor-pointer">
-                            <input checked type="radio" name="category" value="improvement" class="hidden peer"/>
-                            <span class="px-3 py-1.5 text-[10px] font-bold border border-outline-variant text-on-surface-variant peer-checked:bg-inverse-surface peer-checked:text-surface peer-checked:border-inverse-surface transition-all inline-block rounded-sm">Improvement</span>
+                            <input {{ $index === 0 ? 'checked' : '' }} type="radio" name="category" value="{{ $cat->slug }}" class="hidden peer"/>
+                            <span class="px-3 py-1.5 text-[10px] font-bold border border-outline-variant text-on-surface-variant peer-checked:bg-inverse-surface peer-checked:text-surface peer-checked:border-inverse-surface transition-all inline-block rounded-sm">{{ $cat->name }}</span>
                         </label>
-                        <label class="cursor-pointer">
-                            <input type="radio" name="category" value="problem" class="hidden peer"/>
-                            <span class="px-3 py-1.5 text-[10px] font-bold border border-outline-variant text-on-surface-variant peer-checked:bg-inverse-surface peer-checked:text-surface peer-checked:border-inverse-surface transition-all inline-block rounded-sm">Problem Solving</span>
-                        </label>
-                        <label class="cursor-pointer">
-                            <input type="radio" name="category" value="maintenance" class="hidden peer"/>
-                            <span class="px-3 py-1.5 text-[10px] font-bold border border-outline-variant text-on-surface-variant peer-checked:bg-inverse-surface peer-checked:text-surface peer-checked:border-inverse-surface transition-all inline-block rounded-sm">Maintenance</span>
-                        </label>
+                        @empty
+                        <p class="text-[10px] text-red-500 italic">No categories available. Please add them in Data Master.</p>
+                        @endforelse
                     </div>
                 </div>
                 <div>

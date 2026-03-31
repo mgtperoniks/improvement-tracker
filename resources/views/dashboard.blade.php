@@ -7,7 +7,7 @@
     <div class="flex items-end justify-between border-b border-slate-100 pb-4">
         <h2 class="text-xl font-bold tracking-tight text-inverse-surface">Performance Dashboard</h2>
         <div class="text-right">
-            <p class="text-[11px] font-bold text-on-surface-variant uppercase">W{{ now()->format('W') }}: {{ now()->startOfWeek()->format('M d') }}-{{ now()->endOfWeek()->format('d') }}</p>
+            <p class="text-[11px] font-bold text-on-surface-variant uppercase">W{{ $startOfWeek->format('W') }}: {{ $startOfWeek->format('M d') }}-{{ $endOfWeek->format('d') }}</p>
         </div>
     </div>
 

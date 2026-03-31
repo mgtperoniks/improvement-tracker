@@ -25,7 +25,7 @@ class StoreWeeklyPlanRequest extends FormRequest
             'user_id' => 'required|exists:users,id',
             'title' => 'required|string|max:255',
             'expected_output' => 'required|string|min:10',
-            'category' => 'required|in:improvement,problem,maintenance',
+            'category' => 'required|exists:categories,slug',
             'impact_level' => 'required|in:low,medium,high',
             'week_start_date' => 'required|date',
             'week_end_date' => 'required|date|after_or_equal:week_start_date',

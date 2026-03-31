@@ -7,6 +7,7 @@
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script id="tailwind-config">
         tailwind.config = {
             darkMode: "class",
@@ -115,6 +116,24 @@
             <a class="flex items-center gap-3 px-3 py-1.5 {{ request()->routeIs('rankings') ? 'text-blue-700 font-bold border-r-2 border-blue-700 bg-blue-50/50' : 'text-slate-500 hover:text-slate-900 hover:bg-slate-50 transition-colors' }}" href="{{ route('rankings') }}">
                 <span class="material-symbols-outlined text-[20px]">leaderboard</span> Ranking
             </a>
+
+            @if(auth()->user()->isAdmin() || auth()->user()->isManager())
+            <a class="flex items-center gap-3 px-3 py-1.5 {{ request()->routeIs('weekly-reports.*') ? 'text-blue-700 font-bold border-r-2 border-blue-700 bg-blue-50/50' : 'text-slate-500 hover:text-slate-900 hover:bg-slate-50 transition-colors' }}" href="{{ route('weekly-reports.index') }}">
+                <span class="material-symbols-outlined text-[20px]">view_list</span> Daftar Rencana
+            </a>
+            @endif
+
+            @if(auth()->user()->isAdmin())
+            <div class="pt-4 pb-2 border-t border-slate-100 mt-2">
+                <p class="px-3 text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Settings</p>
+                <a class="flex items-center gap-3 px-3 py-1.5 {{ request()->routeIs('admin.users.*') ? 'text-blue-700 font-bold border-r-2 border-blue-700 bg-blue-50/50' : 'text-slate-500 hover:text-slate-900 hover:bg-slate-50 transition-colors' }}" href="{{ route('admin.users.index') }}">
+                    <span class="material-symbols-outlined text-[20px]">manage_accounts</span> Users & Dept
+                </a>
+                <a class="flex items-center gap-3 px-3 py-1.5 {{ request()->routeIs('admin.categories.*') ? 'text-blue-700 font-bold border-r-2 border-blue-700 bg-blue-50/50' : 'text-slate-500 hover:text-slate-900 hover:bg-slate-50 transition-colors' }}" href="{{ route('admin.categories.index') }}">
+                    <span class="material-symbols-outlined text-[20px]">category</span> Categories
+                </a>
+            </div>
+            @endif
         </nav>
         @if(auth()->user()->isAdmin())
         <div class="mt-8">
@@ -163,5 +182,26 @@
 </main>
 
 @yield('scripts')
+    @if(session('success'))
+    <script>
+        Swal.fire({
+            title: 'Berhasil!',
+            text: "{{ session('success') }}",
+            icon: 'success',
+            confirmButtonColor: '#0061e0',
+        });
+    </script>
+    @endif
+
+    @if(session('error'))
+    <script>
+        Swal.fire({
+            title: 'Error!',
+            text: "{{ session('error') }}",
+            icon: 'error',
+            confirmButtonColor: '#0061e0',
+        });
+    </script>
+    @endif
 </body>
 </html>

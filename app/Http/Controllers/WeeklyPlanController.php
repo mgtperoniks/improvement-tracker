@@ -14,8 +14,10 @@ class WeeklyPlanController extends Controller
 {
     public function index()
     {
-        $startOfWeek = now()->startOfWeek();
-        $endOfWeek = now()->endOfWeek();
+        // Default to the latest week that has plans, or current week if none
+        $latestPlan = WeeklyPlan::orderBy('week_start_date', 'desc')->first();
+        $startOfWeek = $latestPlan ? $latestPlan->week_start_date : now()->startOfWeek();
+        $endOfWeek = $startOfWeek->copy()->endOfWeek();
 
         $plans = WeeklyPlan::whereBetween('week_start_date', [$startOfWeek, $endOfWeek])->get();
 
@@ -54,23 +56,22 @@ class WeeklyPlanController extends Controller
             $topPerformer->avg_score = $performanceData->where('user.id', $topPerformer->id)->first()->avg_score;
         }
 
-        return view('dashboard', compact('totalPlans', 'completedPlans', 'completionRate', 'avgScore', 'performanceData', 'topPerformer'));
+        return view('dashboard', compact('totalPlans', 'completedPlans', 'completionRate', 'avgScore', 'performanceData', 'topPerformer', 'startOfWeek', 'endOfWeek'));
     }
 
     public function create()
     {
         $supervisors = User::where('role', 'spv')->get();
-        return view('weekly-plans.create', compact('supervisors'));
+        $categories = \App\Models\Category::all();
+        return view('weekly-plans.create', compact('supervisors', 'categories'));
     }
 
     public function closing()
     {
-        $startOfWeek = now()->startOfWeek();
-        $endOfWeek = now()->endOfWeek();
-
+        // Show all plans that are not completed, regardless of the week
         $plans = WeeklyPlan::with('user')
-            ->whereBetween('week_start_date', [$startOfWeek, $endOfWeek])
-            ->orderBy('status', 'asc')
+            ->where('status', '!=', 'completed')
+            ->orderBy('week_start_date', 'desc')
             ->get();
 
         $stats = (object)[
@@ -120,14 +121,18 @@ class WeeklyPlanController extends Controller
     /**
      * Store a newly created weekly plan in storage.
      */
-    public function store(StoreWeeklyPlanRequest $request): JsonResponse
+    public function store(StoreWeeklyPlanRequest $request)
     {
         $plan = WeeklyPlan::create($request->validated());
 
-        return response()->json([
-            'message' => 'Weekly plan created successfully.',
-            'data' => $plan->load('user')
-        ], 201);
+        if ($request->wantsJson()) {
+            return response()->json([
+                'message' => 'Weekly plan created successfully.',
+                'data' => $plan->load('user')
+            ], 201);
+        }
+
+        return redirect()->route('dashboard')->with('success', 'Weekly plan successfully submitted!');
     }
 
     /**

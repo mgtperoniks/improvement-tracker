@@ -77,13 +77,13 @@
     </section>
 
     <!-- Bottom Section: Category Distribution -->
-    <section class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div class="lg:col-span-2 bg-white p-6 rounded border border-outline-variant/20 shadow-sm">
+    <section class="grid grid-cols-1 gap-6">
+        <div class="bg-white p-6 rounded border border-outline-variant/20 shadow-sm">
             <h3 class="text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-6 flex items-center justify-between">
                 Category Distribution
-                <span class="text-[10px] font-normal normal-case">By Total Effort</span>
+                <span class="text-[10px] font-normal font-mono normal-case italic">By Total Effort</span>
             </h3>
-            <div class="flex flex-col gap-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 @foreach($categories ?? [] as $category => $percent)
                 <div class="space-y-1">
                     <div class="flex justify-between text-[10px] font-bold uppercase tracking-tighter">
@@ -95,27 +95,6 @@
                     </div>
                 </div>
                 @endforeach
-            </div>
-        </div>
-        <div class="bg-slate-900 text-white p-6 rounded flex flex-col justify-between">
-            <div>
-                <h4 class="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 mb-4">Quick Export</h4>
-                <div class="space-y-3">
-                    <button class="w-full flex items-center justify-between p-3 bg-white/10 hover:bg-white/20 transition-colors rounded text-xs font-bold uppercase tracking-wider">
-                        CSV Scoreboard
-                        <span class="material-symbols-outlined text-sm">download</span>
-                    </button>
-                    <button class="w-full flex items-center justify-between p-3 bg-white/10 hover:bg-white/20 transition-colors rounded text-xs font-bold uppercase tracking-wider">
-                        PDF Monthly Wrap
-                        <span class="material-symbols-outlined text-sm">picture_as_pdf</span>
-                    </button>
-                </div>
-            </div>
-            <div class="mt-6 pt-6 border-t border-white/10">
-                <p class="text-[10px] text-slate-400 font-bold uppercase leading-tight">
-                    Last Sync: {{ now()->format('M d, H:i') }}<br/>
-                    ID: TK-{{ now()->format('mY') }}-KAIZEN
-                </p>
             </div>
         </div>
     </section>
