@@ -1,4 +1,7 @@
-FROM php:8.2-fpm
+FROM php:8.3-fpm
+
+# Fix for git dubious ownership
+RUN git config --global --add safe.directory /var/www/html
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
